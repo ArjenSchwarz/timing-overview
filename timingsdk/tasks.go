@@ -64,6 +64,9 @@ type ProjectDetails struct {
 	} `json:"parent"`
 }
 
+// TaskGrouping is a grouped set of tasks
+// For example, tasks can be grouped by task or project to make it easier to
+// have a complete overview
 type TaskGrouping struct {
 	Title    string
 	Duration float64
@@ -71,6 +74,7 @@ type TaskGrouping struct {
 	Tasks    []TaskDetails
 }
 
+// TaskCollection contains a collection of grouped tasks
 type TaskCollection struct {
 	Title     string
 	Duration  float64
@@ -166,11 +170,13 @@ func GroupEntriesByProject(data TaskData) TaskCollection {
 	return result
 }
 
+// AddEntry adds a TaskDetails object to the TaskGrouping
 func (grouping *TaskGrouping) AddEntry(entry TaskDetails) {
 	grouping.Tasks = append(grouping.Tasks, entry)
 	grouping.Duration = grouping.Duration + entry.Duration
 }
 
+// GetDuration returns the summed duration of all tasks in the TaskGrouping
 func (grouping *TaskGrouping) GetDuration() (time.Duration, error) {
 	duration, err := time.ParseDuration(strconv.FormatFloat(grouping.Duration, 'f', 0, 64) + "s")
 	if err != nil {
@@ -179,6 +185,7 @@ func (grouping *TaskGrouping) GetDuration() (time.Duration, error) {
 	return duration, nil
 }
 
+// AddEntry adds a TaskDetails object to a TaskCollection, while also placing it in the defined grouping
 func (collection *TaskCollection) AddEntry(entry TaskDetails, groupTitle string) {
 	grouping := TaskGrouping{Title: groupTitle, Color: entry.Project.Color}
 	groupings := collection.Groupings
@@ -193,6 +200,7 @@ func (collection *TaskCollection) AddEntry(entry TaskDetails, groupTitle string)
 	collection.Duration = collection.Duration + entry.Duration
 }
 
+// GetDuration returns the summed duration of all tasks in the collection
 func (collection *TaskCollection) GetDuration() (time.Duration, error) {
 	duration, err := time.ParseDuration(strconv.FormatFloat(collection.Duration, 'f', 0, 64) + "s")
 	if err != nil {
@@ -201,6 +209,7 @@ func (collection *TaskCollection) GetDuration() (time.Duration, error) {
 	return duration, nil
 }
 
+// GetGroupings returns the Tasks from the TaskCollection separated into predefined groupings
 func (collection *TaskCollection) GetGroupings() []TaskGrouping {
 	result := []TaskGrouping{}
 	for _, k := range collection.keys {
