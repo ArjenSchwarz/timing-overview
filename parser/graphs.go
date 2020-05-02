@@ -22,7 +22,6 @@ func CreateProjectOverviewPieChart(configuration config.Configuration, target io
 	if err != nil {
 		panic(err)
 	}
-
 	chartValues := []chart.Value{}
 
 	tasks := timingsdk.GroupEntriesByProject(test)
@@ -51,7 +50,7 @@ func CreateProjectOverviewPieChart(configuration config.Configuration, target io
 		}
 	}
 	pie := chart.PieChart{
-		Title:  fmt.Sprintf("Data for %v", request.StartDate.Local().Format("02 Jan 2006")),
+		Title:  fmt.Sprintf("Data for %v", request.StartDate.Format("02 Jan 2006")),
 		Width:  768,
 		Height: 768,
 		Values: chartValues,

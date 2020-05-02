@@ -42,3 +42,25 @@ func ParseEnvironmentConfig() Configuration {
 	}
 	return configuration
 }
+
+func (configuration *Configuration) ParseJson(jsonstring string) {
+	type requestBody struct {
+		StartDate string `json:"start_date"`
+		EndDate   string `json:"end_date"`
+	}
+	body := requestBody{}
+	err := json.Unmarshal([]byte(jsonstring), &body)
+	if err != nil {
+		panic(err)
+	}
+	startdate, err := time.Parse("2006-01-02 15:04 -0700", body.StartDate)
+	if err != nil {
+		panic(err)
+	}
+	configuration.StartDate = startdate
+	enddate, err := time.Parse("2006-01-02 15:04 -0700", body.EndDate)
+	if err != nil {
+		panic(err)
+	}
+	configuration.EndDate = enddate
+}

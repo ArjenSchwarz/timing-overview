@@ -1,19 +1,39 @@
 package main
 
 import (
+	"bufio"
 	"context"
+	"encoding/base64"
 	"flag"
+	"io/ioutil"
 	"os"
 	"time"
 
 	"github.com/ArjenSchwarz/TimingSDK/config"
 	"github.com/ArjenSchwarz/TimingSDK/parser"
+	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 )
 
-func HandleRequest(ctx context.Context) (string, error) {
-	// configuration := config.ParseEnvironmentConfig()
-	return "test", nil
+func handleRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	configuration := config.ParseEnvironmentConfig()
+	configuration.ParseJson(request.Body)
+	f, _ := os.Create("/tmp/output.png")
+	parser.CreateProjectOverviewPieChart(configuration, f)
+	f.Close()
+	f, _ = os.Open("/tmp/output.png")
+	reader := bufio.NewReader(f)
+	content, _ := ioutil.ReadAll(reader)
+	// Encode as base64.
+	encoded := base64.StdEncoding.EncodeToString(content)
+	headers := make(map[string]string)
+	headers["content-type"] = "image/png"
+	return events.APIGatewayProxyResponse{
+		Body:            encoded,
+		Headers:         headers,
+		StatusCode:      200,
+		IsBase64Encoded: true,
+	}, nil
 }
 
 var local bool
@@ -40,7 +60,7 @@ func main() {
 		defer f.Close()
 		parser.CreateProjectOverviewPieChart(configuration, f)
 	} else {
-		lambda.Start(HandleRequest)
+		lambda.Start(handleRequest)
 	}
 
 }
