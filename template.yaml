@@ -19,6 +19,17 @@ Resources:
       StageName: Prod
       BinaryMediaTypes:
         - "*~1*"
+      Auth:
+        ApiKeyRequired: true
+        UsagePlan:
+          CreateUsagePlan: PER_API
+          Description: Usage Plan for Timing API
+          Quota:
+            Limit: 500
+            Period: MONTH
+          Throttle:
+            BurstLimit: 5
+            RateLimit: 2
   TimingAPIFunction:
     Type: AWS::Serverless::Function
     Properties:
