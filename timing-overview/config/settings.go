@@ -4,6 +4,10 @@ import (
 	"encoding/json"
 	"os"
 	"time"
+
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/ssm"
 )
 
 // Config is a configuration object
@@ -35,8 +39,18 @@ func ParseConfigFile() Configuration {
 }
 
 func ParseEnvironmentConfig() Configuration {
+	mySession := session.Must(session.NewSession())
+	// Create a SSM client from just a session.
+	svc := ssm.New(mySession)
+	parameter, err := svc.GetParameter(&ssm.GetParameterInput{
+		Name:           aws.String(os.Getenv("API_TOKEN_PARAMETER")),
+		WithDecryption: aws.Bool(true),
+	})
+	if err != nil {
+		panic(err)
+	}
 	configuration := Configuration{
-		Token:     os.Getenv("API_TOKEN"),
+		Token:     *parameter.Parameter.Value,
 		StartDate: time.Now(),
 		EndDate:   time.Now(),
 	}

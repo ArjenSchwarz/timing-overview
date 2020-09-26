@@ -6,34 +6,40 @@ Globals:
   Function:
     Timeout: 5
 
+Parameters:
+    ApiTokenParameterPath:
+      Type: String
+      Description: The path of the parameter store secret containing the Timing API token (don't include the starting /)
+      Default: timing/api-token
+
 Resources:
+  TimingAPI:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      BinaryMediaTypes:
+        - "*~1*"
   TimingAPIFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Type: AWS::Serverless::Function
     Properties:
       CodeUri: timing-overview
       Handler: timing-overview
       Runtime: go1.x
-      Tracing: Active # https://docs.aws.amazon.com/lambda/latest/dg/lambda-x-ray.html
       Events:
         CatchAll:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Type: Api
           Properties:
             Path: /
             Method: POST
-      # Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
-      #   Variables:
-      #     API_TOKEN:
+            RestApiId: !Ref TimingAPI
+      Policies:
+        - SSMParameterReadPolicy:
+            ParameterName: !Ref ApiTokenParameterPath
+      Environment:
+        Variables:
+          API_TOKEN_PARAMETER: !Sub "/${ApiTokenParameterPath}"
 
 Outputs:
-  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
-  # Find out more about other implicit resources you can reference within SAM
-  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
-  TimingAPIAPI:
-    Description: "API Gateway endpoint URL for Prod environment for First Function"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
-  TimingAPIFunction:
-    Description: "First Lambda Function ARN"
-    Value: !GetAtt TimingAPIFunction.Arn
-  TimingAPIFunctionIamRole:
-    Description: "Implicit IAM Role created for Hello World function"
-    Value: !GetAtt TimingAPIFunctionRole.Arn
+  Endpoint:
+    Description: "API Gateway endpoint URL for Prod environment"
+    Value: !Sub "https://${TimingAPI}.execute-api.${AWS::Region}.amazonaws.com/Prod"

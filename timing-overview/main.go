@@ -17,7 +17,11 @@ import (
 
 func handleRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	configuration := config.ParseEnvironmentConfig()
-	configuration.ParseJson(request.Body)
+	body, err := base64.StdEncoding.DecodeString(request.Body)
+	if err != nil {
+		panic(err)
+	}
+	configuration.ParseJson(string(body))
 	f, _ := os.Create("/tmp/output.png")
 	parser.CreateProjectOverviewPieChart(configuration, f)
 	f.Close()
@@ -62,5 +66,4 @@ func main() {
 	} else {
 		lambda.Start(handleRequest)
 	}
-
 }
