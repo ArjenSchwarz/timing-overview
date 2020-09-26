@@ -1,6 +1,6 @@
 # Timing Overview
 
-Timing Overview is a small Go function, runnable as a Lambda function or locally on your machine, that currently creates a pie chart of your activities during the provided time period.
+Timing Overview is a small Go function, runnable as a Lambda function or locally on your machine, that currently creates a pie chart of your activities during the provided time period as recorded [by Timing](https://timingapp.com).
 
 I personally use the Lambda version to automatically insert this overview into my daily journal, as it gives a nice overview of what I've done that day.
 
