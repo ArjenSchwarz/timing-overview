@@ -13,7 +13,7 @@ Parameters:
       Default: timing/api-token
 
 Resources:
-  TimingAPI:
+  TimingGraphAPI:
     Type: AWS::Serverless::Api
     Properties:
       StageName: Prod
@@ -30,7 +30,7 @@ Resources:
           Throttle:
             BurstLimit: 5
             RateLimit: 2
-  TimingAPIFunction:
+  TimingGraphAPIFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: timing-overview
@@ -40,9 +40,9 @@ Resources:
         CatchAll:
           Type: Api
           Properties:
-            Path: /
+            Path: /graph
             Method: POST
-            RestApiId: !Ref TimingAPI
+            RestApiId: !Ref TimingGraphAPI
       Policies:
         - SSMParameterReadPolicy:
             ParameterName: !Ref ApiTokenParameterPath
@@ -53,4 +53,4 @@ Resources:
 Outputs:
   Endpoint:
     Description: "API Gateway endpoint URL for Prod environment"
-    Value: !Sub "https://${TimingAPI}.execute-api.${AWS::Region}.amazonaws.com/Prod"
+    Value: !Sub "https://${TimingGraphAPI}.execute-api.${AWS::Region}.amazonaws.com/Prod/graph"
