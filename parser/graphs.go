@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/ArjenSchwarz/TimingSDK/config"
-	"github.com/ArjenSchwarz/TimingSDK/timingsdk"
+	"github.com/ArjenSchwarz/timing-overview/config"
+	"github.com/ArjenSchwarz/timing-overview/timingsdk"
 	"github.com/wcharczuk/go-chart"
 	"github.com/wcharczuk/go-chart/drawing"
 )

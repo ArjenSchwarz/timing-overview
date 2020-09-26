@@ -33,7 +33,7 @@ Resources:
   TimingGraphAPIFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: timing-overview
+      CodeUri: ./
       Handler: timing-overview
       Runtime: go1.x
       Events:

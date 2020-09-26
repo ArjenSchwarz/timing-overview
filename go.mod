@@ -1,4 +1,4 @@
-module github.com/ArjenSchwarz/TimingSDK
+module github.com/ArjenSchwarz/timing-overview
 
 go 1.15
 

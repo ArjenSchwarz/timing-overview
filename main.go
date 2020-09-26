@@ -9,8 +9,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/ArjenSchwarz/TimingSDK/config"
-	"github.com/ArjenSchwarz/TimingSDK/parser"
+	"github.com/ArjenSchwarz/timing-overview/config"
+	"github.com/ArjenSchwarz/timing-overview/parser"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 )
