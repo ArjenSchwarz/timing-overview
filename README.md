@@ -8,6 +8,8 @@ I personally use the Lambda version to automatically insert this overview into m
 
 ## Usage
 
+Current functionality is limited to creating an image of a pie chart for the provided period. There is no restriction on the length of this period.
+
 ### Local
 
 If you want to run timing overview locally, you have the usual options:
@@ -87,3 +89,4 @@ You will notice the provided dates are a bit different as they include the timez
 * Give the CLI version a help functionality
 * See if I can autodetect whether it's Lambda or local so the flag isn't needed anymore
 * Provide proper default values (today) for the CLI version
+* Handle no results situations properly

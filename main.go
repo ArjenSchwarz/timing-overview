@@ -21,7 +21,7 @@ func handleRequest(ctx context.Context, request events.APIGatewayProxyRequest) (
 	if err != nil {
 		panic(err)
 	}
-	configuration.ParseJson(string(body))
+	configuration.ParseJSON(string(body))
 	f, _ := os.Create("/tmp/output.png")
 	parser.CreateProjectOverviewPieChart(configuration, f)
 	f.Close()

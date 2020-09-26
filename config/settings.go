@@ -10,7 +10,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/ssm"
 )
 
-// Config is a configuration object
+// Configuration is a configuration object
 type Configuration struct {
 	// The start date for any calls
 	StartDate time.Time
@@ -20,6 +20,7 @@ type Configuration struct {
 	Token string `json:"APIToken"`
 }
 
+// ParseConfigFile will parse a local config.json file for its configuration
 func ParseConfigFile() Configuration {
 	file, _ := os.Open("config.json")
 	defer file.Close()
@@ -38,9 +39,11 @@ func ParseConfigFile() Configuration {
 	return configuration
 }
 
+// ParseEnvironmentConfig retrieves configuration from the environment
+// This is used for the Lambda only and will expect the API_TOKEN_PARAMETER
+// environment variable to be set
 func ParseEnvironmentConfig() Configuration {
 	mySession := session.Must(session.NewSession())
-	// Create a SSM client from just a session.
 	svc := ssm.New(mySession)
 	parameter, err := svc.GetParameter(&ssm.GetParameterInput{
 		Name:           aws.String(os.Getenv("API_TOKEN_PARAMETER")),
@@ -57,7 +60,9 @@ func ParseEnvironmentConfig() Configuration {
 	return configuration
 }
 
-func (configuration *Configuration) ParseJson(jsonstring string) {
+// ParseJSON parses a JSON document provided
+// The JSON format is expected to have the start_date and end_date keys.
+func (configuration *Configuration) ParseJSON(jsonstring string) {
 	type requestBody struct {
 		StartDate string `json:"start_date"`
 		EndDate   string `json:"end_date"`
