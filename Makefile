@@ -6,14 +6,9 @@ deps:
 clean:
 	rm -rf timing-overview/timing-overview
 
-build-sam: clean
-	cd timing-overview && GOOS=linux GOARCH=amd64 go build -o timing-overview
+deploy-sam:
+	sam build
+	sam deploy --stack-name timing-overview --s3-bucket ignoreme-artefacts-us-east-1 --capabilities CAPABILITY_NAMED_IAM
 
 build:
 	cd timing-overview && go build -o timing-overview
-
-test-sam: build-sam
-	curl --header "Content-Type: application/json" \
-  	--request POST \
-  	--data '{"start_date":"2020-05-01 00:00 +1000", "end_date":"2020-05-01 23:59 +1000"}' \
-  	http://localhost:3000/ | base64 --decode > samtest.png
