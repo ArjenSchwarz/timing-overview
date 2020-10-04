@@ -29,7 +29,7 @@ Create a config.json file containing your API token:
 Run it:
 
 ```bash
-$ timing-overview --local --startdate "2020-09-20 00:00" --enddate "2020-09-20 23:59"
+$ timing-overview --startdate "2020-09-20 00:00" --enddate "2020-09-20 23:59"
 ```
 
 This will use your local timezone to create an output.png image similar to the example above.
@@ -84,9 +84,9 @@ You will notice the provided dates are a bit different as they include the timez
 
 ## Todo
 
-* Break out the SDK into its own repo so it can be reused for other uses.
-* Add some other endpoints
-* Give the CLI version a help functionality
-* See if I can autodetect whether it's Lambda or local so the flag isn't needed anymore
-* Provide proper default values (today) for the CLI version
-* Handle no results situations properly
+[ ] Break out the SDK into its own repo so it can be reused for other uses.
+[ ] Add some other endpoints
+[ ] Give the CLI version a help functionality
+[x] See if I can autodetect whether it's Lambda or local so the flag isn't needed anymore (thanks [@sktan](https://github.com/sktan))
+[ ] Provide proper default values (today) for the CLI version
+[ ] Handle no results situations properly
