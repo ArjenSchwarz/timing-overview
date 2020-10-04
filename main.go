@@ -45,7 +45,12 @@ var rawstartdate string
 var rawenddate string
 
 func init() {
-	flag.BoolVar(&local, "local", false, "Run locally")
+	_, taskExists := os.LookupEnv("LAMBDA_TASK_ROOT")
+	_, execExists := os.LookupEnv("AWS_EXECUTION_ENV")
+	local = true
+	if taskExists || execExists {
+	        local = false
+	}
 	flag.StringVar(&rawstartdate, "startdate", "", "The startdate in format 2006-01-02 15:04")
 	flag.StringVar(&rawenddate, "enddate", "", "The enddate, leave blank for now")
 	flag.Parse()
