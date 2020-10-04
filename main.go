@@ -48,7 +48,7 @@ func init() {
 	_, taskExists := os.LookupEnv("LAMBDA_TASK_ROOT")
 	_, execExists := os.LookupEnv("AWS_EXECUTION_ENV")
 	local = true
-	if task_exists == true; exec_exists == true {
+	if taskExists || execExists {
 	        local = false
 	}
 	flag.StringVar(&rawstartdate, "startdate", "", "The startdate in format 2006-01-02 15:04")
