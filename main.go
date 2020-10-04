@@ -49,10 +49,10 @@ func init() {
 	_, execExists := os.LookupEnv("AWS_EXECUTION_ENV")
 	local = true
 	if taskExists || execExists {
-	        local = false
+		local = false
 	}
-	flag.StringVar(&rawstartdate, "startdate", "", "The startdate in format 2006-01-02 15:04")
-	flag.StringVar(&rawenddate, "enddate", "", "The enddate, leave blank for now")
+	flag.StringVar(&rawstartdate, "startdate", "", "The startdate in format 2006-01-02 15:04, leave empty for start of today")
+	flag.StringVar(&rawenddate, "enddate", "", "The enddate, leave empty for current date and time")
 	flag.Parse()
 }
 
@@ -61,6 +61,10 @@ func main() {
 		configuration := config.ParseConfigFile()
 		if rawstartdate != "" {
 			configuration.StartDate, _ = time.ParseInLocation("2006-01-02 15:04", rawstartdate, time.Local)
+		} else {
+			now := time.Now()
+			year, month, day := now.Date()
+			configuration.StartDate = time.Date(year, month, day, 0, 0, 0, 0, time.Local)
 		}
 		if rawenddate != "" {
 			configuration.EndDate, _ = time.ParseInLocation("2006-01-02 15:04", rawenddate, time.Local)
