@@ -40,6 +40,23 @@ func handleRequest(ctx context.Context, request events.APIGatewayProxyRequest) (
 	}, nil
 }
 
+func runLocal() {
+	configuration := config.ParseConfigFile()
+	if rawstartdate != "" {
+		configuration.StartDate, _ = time.ParseInLocation("2006-01-02 15:04", rawstartdate, time.Local)
+	} else {
+		now := time.Now()
+		year, month, day := now.Date()
+		configuration.StartDate = time.Date(year, month, day, 0, 0, 0, 0, time.Local)
+	}
+	if rawenddate != "" {
+		configuration.EndDate, _ = time.ParseInLocation("2006-01-02 15:04", rawenddate, time.Local)
+	}
+	f, _ := os.Create("output.png")
+	defer f.Close()
+	parser.CreateProjectOverviewPieChart(configuration, f)
+}
+
 var local bool
 var rawstartdate string
 var rawenddate string
@@ -58,20 +75,7 @@ func init() {
 
 func main() {
 	if local {
-		configuration := config.ParseConfigFile()
-		if rawstartdate != "" {
-			configuration.StartDate, _ = time.ParseInLocation("2006-01-02 15:04", rawstartdate, time.Local)
-		} else {
-			now := time.Now()
-			year, month, day := now.Date()
-			configuration.StartDate = time.Date(year, month, day, 0, 0, 0, 0, time.Local)
-		}
-		if rawenddate != "" {
-			configuration.EndDate, _ = time.ParseInLocation("2006-01-02 15:04", rawenddate, time.Local)
-		}
-		f, _ := os.Create("output.png")
-		defer f.Close()
-		parser.CreateProjectOverviewPieChart(configuration, f)
+		runLocal()
 	} else {
 		lambda.Start(handleRequest)
 	}
