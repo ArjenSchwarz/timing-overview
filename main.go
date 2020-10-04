@@ -45,8 +45,8 @@ var rawstartdate string
 var rawenddate string
 
 func init() {
-	task_path, task_exists := os.LookupEnv("LAMBDA_TASK_ROOT")
-	exec_path, exec_exists := os.LookupEnv("AWS_EXECUTION_ENV")
+	_, taskExists := os.LookupEnv("LAMBDA_TASK_ROOT")
+	_, execExists := os.LookupEnv("AWS_EXECUTION_ENV")
 	local = true
 	if task_exists == true; exec_exists == true {
 	        local = false
