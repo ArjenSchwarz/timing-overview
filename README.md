@@ -92,3 +92,4 @@ You will notice the provided dates are a bit different as they include the timez
 [x] See if I can autodetect whether it's Lambda or local so the flag isn't needed anymore (thanks [@sktan](https://github.com/sktan))
 [x] Provide proper default values (today) for the CLI version
 [ ] Handle no results situations properly
+[x] Migrate from aws-sdk-go to aws-sdk-go-v2 for improved performance and modern capabilities

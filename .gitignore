@@ -1,4 +1,7 @@
 output.png
 config.json
 timing-overview
+bootstrap
 .aws-sam/
+pkg/
+dist/

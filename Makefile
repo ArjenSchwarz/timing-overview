@@ -17,15 +17,15 @@ test:
 
 .PHONY: clean
 clean:
-	rm -rf ./dist ./pkg timing-overview output.png
+	rm -rf ./dist ./pkg ./.aws-sam timing-overview bootstrap output.png
 
 .PHONY: compile
 compile:
-	GOOS=linux GOARCH=amd64 go build -o pkg/linux_amd64/timing-overview main.go
-	GOOS=darwin GOARCH=amd64 go build -o pkg/darwin_amd64/timing-overview main.go
-	GOOS=windows GOARCH=amd64 go build -o pkg/windows_amd64/timing-overview.exe main.go
-	GOOS=linux GOARCH=386 go build -o pkg/linux_386/timing-overview main.go
-	GOOS=windows GOARCH=386 go build -o pkg/windows_386/timing-overview.exe main.go
+	cd src && GOOS=linux GOARCH=amd64 go build -o ../pkg/linux_amd64/timing-overview main.go
+	cd src && GOOS=darwin GOARCH=amd64 go build -o ../pkg/darwin_amd64/timing-overview main.go
+	cd src && GOOS=windows GOARCH=amd64 go build -o ../pkg/windows_amd64/timing-overview.exe main.go
+	cd src && GOOS=linux GOARCH=386 go build -o ../pkg/linux_386/timing-overview main.go
+	cd src && GOOS=windows GOARCH=386 go build -o ../pkg/windows_386/timing-overview.exe main.go
 
 .PHONY: package
 package:
@@ -38,6 +38,6 @@ package:
 
 .PHONY: local
 local:
-	golint ./...
-	go test ./...
-	go build
+	cd src && golint ./...
+	cd src && go test ./...
+	cd src && go build -o ../timing-overview main.go

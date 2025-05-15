@@ -1,13 +1,14 @@
 package config
 
 import (
+	"context"
 	"encoding/json"
 	"os"
 	"time"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/ssm"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/service/ssm"
 )
 
 // Configuration is a configuration object
@@ -43,9 +44,13 @@ func ParseConfigFile() Configuration {
 // This is used for the Lambda only and will expect the API_TOKEN_PARAMETER
 // environment variable to be set
 func ParseEnvironmentConfig() Configuration {
-	mySession := session.Must(session.NewSession())
-	svc := ssm.New(mySession)
-	parameter, err := svc.GetParameter(&ssm.GetParameterInput{
+	ctx := context.TODO()
+	cfg, err := config.LoadDefaultConfig(ctx)
+	if err != nil {
+		panic(err)
+	}
+	svc := ssm.NewFromConfig(cfg)
+	parameter, err := svc.GetParameter(ctx, &ssm.GetParameterInput{
 		Name:           aws.String(os.Getenv("API_TOKEN_PARAMETER")),
 		WithDecryption: aws.Bool(true),
 	})

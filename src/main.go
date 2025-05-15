@@ -5,7 +5,7 @@ import (
 	"context"
 	"encoding/base64"
 	"flag"
-	"io/ioutil"
+	"io"
 	"os"
 	"time"
 
@@ -27,7 +27,7 @@ func handleRequest(ctx context.Context, request events.APIGatewayProxyRequest) (
 	f.Close()
 	f, _ = os.Open("/tmp/output.png")
 	reader := bufio.NewReader(f)
-	content, _ := ioutil.ReadAll(reader)
+	content, _ := io.ReadAll(reader)
 	// Encode as base64.
 	encoded := base64.StdEncoding.EncodeToString(content)
 	headers := make(map[string]string)

@@ -2,7 +2,7 @@ package timingsdk
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"sort"
 	"strconv"
@@ -144,7 +144,7 @@ func GetTimeEntries(request EntriesRequest) (TaskData, error) {
 		return result, err
 	}
 	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return result, err
 	}

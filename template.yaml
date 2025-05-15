@@ -33,9 +33,11 @@ Resources:
   TimingGraphAPIFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ./
-      Handler: timing-overview
-      Runtime: go1.x
+      CodeUri: src/
+      Handler: bootstrap
+      Runtime: provided.al2023
+      Architectures:
+        - x86_64
       Events:
         CatchAll:
           Type: Api
